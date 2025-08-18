@@ -11,18 +11,24 @@ const mockPosts: Post[] = [
     content: "Content 1",
     createdAt: 0,
   },
+  {
+    id: "2",
+    title: "Post 1",
+    content: "Content 1",
+    createdAt: 0,
+  },
 ];
 
 const PostList = () => {
   return (
     <div className="mt-8">
       {mockPosts.map((post: Post) => (
-          <Link key={post.id} href={`/post/${post.id}`}>
-            <Post post={post} />
-          </Link>
+        <Link key={post.id} href={`/post/${post.id}`}>
+          <Post post={post} />
+        </Link>
       ))}
       <div className="mt-8">
-        <Pagination totalPages={1} />
+        <Pagination totalPages={10} />
       </div>
     </div>
   );

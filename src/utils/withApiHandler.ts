@@ -11,10 +11,9 @@ export function withApiHandler(
       return await handler(req);
     } catch (err: any) {
       console.error("API Error:", err);
-      return Response.json(
-        error(err.message || "Internal Server Error", defaultStatus),
-        { status: defaultStatus },
-      );
+      return Response.json(error(err.message || "Internal Server Error", 500), {
+        status: 500,
+      });
     }
   };
 }
