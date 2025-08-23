@@ -3,32 +3,23 @@
 import Link from "next/link";
 import Post from "@/components/post";
 import Pagination from "@/modules/home/pagination";
-
-const mockPosts: Post[] = [
-  {
-    id: "1",
-    title: "Post 1",
-    content: "Content 1",
-    createdAt: 0,
-  },
-  {
-    id: "2",
-    title: "Post 1",
-    content: "Content 1",
-    createdAt: 0,
-  },
-];
+import useQueryPostList  from "@/hooks/use-query-post-list";
 
 const PostList = () => {
+  const { data, isLoading, error } = useQueryPostList();
+  const {posts = [], totalPages} = data || {} ;
   return (
     <div className="mt-8">
-      {mockPosts.map((post: Post) => (
+      {isLoading && <p>Loading...</p>}
+      {error && <div>Error loading posts: {error.message}</div>}
+      {!isLoading && posts.length === 0 && <div>No posts found.</div>}
+      {!isLoading&&posts.map((post: Post) => (
         <Link key={post.id} href={`/post/${post.id}`}>
           <Post post={post} />
         </Link>
       ))}
       <div className="mt-8">
-        <Pagination totalPages={10} />
+        <Pagination totalPages={totalPages} />
       </div>
     </div>
   );

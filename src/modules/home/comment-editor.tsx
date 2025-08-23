@@ -1,11 +1,16 @@
 "use client";
-
+import { useQueryClient} from "@tanstack/react-query";
+import { addPost } from "@/service/post";
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
+import { useMutation } from "@tanstack/react-query";
+import { Holtwood_One_SC } from "next/font/google";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { useState } from "react";
 
 interface CommentEditorProps {
@@ -17,6 +22,18 @@ const CommentEditor = ({ isOpen, setIsOpen }: CommentEditorProps) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
+  const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+
+  const { mutate: addPostMutate ,isPending } = useMutation({
+    mutationFn : addPost,
+    onSuccess: () => { 
+    setIsOpen(false); 
+    queryClient.invalidateQueries({ queryKey: ["posts", "1"] }); 
+  }, 
+});
+
+
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
@@ -24,6 +41,14 @@ const CommentEditor = ({ isOpen, setIsOpen }: CommentEditorProps) => {
     setContent(e.target.value);
   };
 
+  const onPost = () => {
+    if (isPending) return; // Prevent multiple submissions
+    if (!title || !content) {
+      alert("Title and content cannot be empty");
+      return;  
+    }
+    addPostMutate({ title, content });
+  }
   return (
     <Dialog
       open={isOpen}
@@ -58,8 +83,10 @@ const CommentEditor = ({ isOpen, setIsOpen }: CommentEditorProps) => {
           </button>
           <button
             className="text-white font-bold cursor-pointer"
-            onClick={() => setIsOpen(false)}
+            onClick={onPost}
+            disabled={isPending} 
           >
+            {isPending ? "Posting..." : "Post"}
             Post
           </button>
         </div>
