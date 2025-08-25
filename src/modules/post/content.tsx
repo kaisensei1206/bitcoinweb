@@ -2,9 +2,14 @@
 
 import Post from "@/components/post";
 import { useRouter } from "next/navigation";
-import useQueryPost from "@/hooks/use-query-post-list";
-import { error } from "console";
+import useQueryPost from "@/hooks/use-query-post";
 
+const mockPost: Post = {
+  id: "1",
+  title: "Post 1",
+  content: "Content 1",
+  createdAt: 0,
+};
 
 const Content = () => {
   const router = useRouter();
