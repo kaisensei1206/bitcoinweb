@@ -26,4 +26,4 @@ export const POST = withApiHandler(async (request: NextRequest) => {
   return Response.json(success({ id: result.insertedId }), {
     status: 200,
   });
-});
+}); 

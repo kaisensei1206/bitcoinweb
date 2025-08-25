@@ -24,14 +24,19 @@ const CommentEditor = ({ isOpen, setIsOpen }: CommentEditorProps) => {
 
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const currentPage = searchParams.get("page") || "1";
 
   const { mutate: addPostMutate ,isPending } = useMutation({
     mutationFn : addPost,
     onSuccess: () => { 
     setIsOpen(false); 
     queryClient.invalidateQueries({ queryKey: ["posts", "1"] }); 
+    if (currentPage !== "1") {
+      router.push("/?page=1");
+    }
   }, 
-});
+}); 
 
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

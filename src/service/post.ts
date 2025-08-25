@@ -11,4 +11,11 @@ export const addPost = async (data: { title: string; content: string }) => {
   });
   const resData = await response.json();
   return resData.data ;
-};;
+};; 
+
+
+export const getPostById = async (id: string) => {
+  const response = await fetch(`/api/post/detail?id=${id}`);
+  const resData = await response.json();
+  return resData.data;
+};
